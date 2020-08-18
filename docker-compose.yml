@@ -1,0 +1,32 @@
+version: "3"
+services:
+    mysql:
+        image: mysql:5.7
+        ports:
+            - "3307:3306"
+        command: --init-file /init.sql
+        volumes:
+            - sqldata:/var/lib/mysql/
+            - ./init.sql:/init.sql
+        environment:
+            MYSQL_ROOT_USER: root
+            MYSQL_ROOT_PASSWORD: 123456
+        restart: always
+    redis:
+        image: redis
+        ports:
+            - "6380:6379"
+        command: redis-server --requirepass 123456
+        restart: always
+    api:
+        build: .
+        image: crawler_job
+        container_name: 'crawlerJob'
+        ports:
+            - "8080:8080"
+        depends_on:
+            - "mysql"
+            - "redis"
+        restart: always
+volumes:
+    sqldata:
