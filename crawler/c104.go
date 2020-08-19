@@ -1,9 +1,9 @@
 package crawler
 
 import (
-	"crawlerJob/model"
-	"crawlerJob/telegram"
 	"fmt"
+	"jobCrawler/model"
+	"jobCrawler/telegram"
 	"time"
 
 	"github.com/gocolly/colly/v2"

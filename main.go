@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 
-	"crawlerJob/config"
-	"crawlerJob/crawler"
-	"crawlerJob/model"
-	"crawlerJob/schema"
-	"crawlerJob/telegram"
+	"jobCrawler/config"
+	"jobCrawler/crawler"
+	"jobCrawler/model"
+	"jobCrawler/schema"
+	"jobCrawler/telegram"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
