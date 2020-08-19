@@ -18,10 +18,10 @@ services:
             - "6380:6379"
         command: redis-server --requirepass 123456
         restart: always
-    api:
+    service:
         build: .
-        image: crawler_job
-        container_name: 'crawlerJob'
+        image: job_crawler
+        container_name: 'jobCrawler'
         ports:
             - "8080:8080"
         depends_on:
