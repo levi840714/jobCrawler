@@ -1,7 +1,7 @@
 # jobCrawler
 Golang job crawler form 104 website
 
-## Docker快速佈署環境
+## Docker directly deploy environment
 
 Please go to the **.env.example** file to set the config data 
 
