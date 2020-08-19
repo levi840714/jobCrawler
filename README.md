@@ -3,7 +3,7 @@ Golang job crawler form 104 website
 
 ## Docker快速佈署環境
 
-Please go to the .env.example file to set the config data 
+Please go to the **.env.example** file to set the config data 
 
 **BOT_TOKEN** is your telegram bot token
 

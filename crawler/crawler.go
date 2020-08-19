@@ -15,8 +15,9 @@ type jobInfo struct {
 }
 
 const (
-	Crawler_Init = "initial"
-	Crawler_104  = "New104"
+	Crawler_Init     = "initial"
+	Crawler_Shutdown = "shutdown"
+	Crawler_104      = "New104"
 )
 
 func (j *jobInfo) String() string {
@@ -29,22 +30,34 @@ type Action interface {
 	Exit()
 }
 
-var action = map[string]func() Action{
-	Crawler_Init: NewInit,
-	Crawler_104:  New104,
+type JobCrawler struct {
+	Initial string
+	Final   string
+	Action  map[string]Action
 }
 
-var current string = "initial"
-
-func Run() {
+func (j *JobCrawler) Run() {
+	current := j.Initial
 	for {
-		if fn, ok := action[current]; ok {
-			instance := fn()
+		if instance, ok := j.Action[current]; ok {
 			instance.Entry()
 			current = instance.Crawler()
 			instance.Exit()
 		}
 	}
+}
+
+func Run() {
+	jobCrawler := JobCrawler{
+		Initial: Crawler_Init,
+		Final:   Crawler_Shutdown,
+		Action: map[string]Action{
+			Crawler_Init: NewInit(),
+			Crawler_104:  New104(),
+		},
+	}
+
+	jobCrawler.Run()
 }
 
 type Initial struct{}

@@ -29,5 +29,6 @@ func main() {
 	// telegram bot setup
 	telegram.Init()
 
+	//start job crawler run!
 	crawler.Run()
 }

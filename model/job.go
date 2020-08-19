@@ -1,7 +1,7 @@
 package model
 
 import (
-	"fmt"
+	"log"
 	"time"
 
 	"github.com/jinzhu/gorm"
@@ -39,7 +39,7 @@ func InsertJob(jobid, keyword, company, title, salary, content, link, website st
 	insert := Job{JobId: jobid, Keyword: keyword, Company: company, Title: title, Salary: salary, Content: content, Link: link, Website: website, Status: JobOk, CreateAt: time.Now()}
 	db := DB.Set("gorm:insert_option", "ON DUPLICATE KEY UPDATE JobId = VALUES(JobId)").Create(&insert)
 	if db.Error != nil {
-		fmt.Println(db.Error)
+		log.Println(db.Error)
 	}
 
 	result := db.RowsAffected == 1
