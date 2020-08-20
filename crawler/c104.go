@@ -10,40 +10,44 @@ import (
 )
 
 const (
-	URL = "https://www.104.com.tw/jobs/search/?keyword=golang&area=6001001000,6001008000&jobsource=2018indexpoc&ro=0&page="
+	URL_104 = "https://www.104.com.tw/jobs/search/?keyword=golang&area=6001001000,6001008000&jobsource=2018indexpoc&ro=0&page="
 )
 
 var ch104 = make(chan bool, 1)
 
-type c104 struct{}
-
-func New104() Action {
-	return c104{}
+type c104 struct {
+	Name string
+	Next string
 }
 
-func (c104) Entry() {
+func New104() Action {
+	return c104{
+		Name: Crawler_104,
+		Next: Crawler_CakeResume,
+	}
+}
+
+func (c c104) Entry() {
 	fmt.Println("Entry 104")
 }
 
-func (c104) Crawler() string {
+func (c c104) Crawler() string {
 	var page int = 1
 	for {
 		select {
 		case <-ch104:
 			fmt.Println("stop 104 crawler")
-			return Crawler_Init
+			return c.Next
 		default:
-			crawler(page)
+			crawler104(page)
 			page++
 			time.Sleep(time.Second)
 		}
 	}
-
-	// crawler(page)
 }
 
-func crawler(page int) {
-	url := fmt.Sprintf("%s%d", URL, page)
+func crawler104(page int) {
+	url := fmt.Sprintf("%s%d", URL_104, page)
 	fmt.Println(url)
 	stories := []jobInfo{}
 
@@ -104,7 +108,7 @@ func crawler(page int) {
 	fmt.Println(len(stories))
 }
 
-func (c104) Exit() {
+func (c c104) Exit() {
 	fmt.Println("Exit 104")
-	time.Sleep(4 * time.Hour)
+	time.Sleep(10 * time.Second)
 }

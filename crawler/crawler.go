@@ -15,9 +15,10 @@ type jobInfo struct {
 }
 
 const (
-	Crawler_Init     = "initial"
-	Crawler_Shutdown = "shutdown"
-	Crawler_104      = "New104"
+	Crawler_Init       = "initial"
+	Crawler_Shutdown   = "shutdown"
+	Crawler_104        = "New104"
+	Crawler_CakeResume = "NewCakeresume"
 )
 
 func (j *jobInfo) String() string {
@@ -52,29 +53,36 @@ func Run() {
 		Initial: Crawler_Init,
 		Final:   Crawler_Shutdown,
 		Action: map[string]Action{
-			Crawler_Init: NewInit(),
-			Crawler_104:  New104(),
+			Crawler_Init:       NewInit(),
+			Crawler_104:        New104(),
+			Crawler_CakeResume: NewCakeresume(),
 		},
 	}
 
 	jobCrawler.Run()
 }
 
-type Initial struct{}
-
-func NewInit() Action {
-	return Initial{}
+type Initial struct {
+	Name string
+	Next string
 }
 
-func (Initial) Entry() {
+func NewInit() Action {
+	return Initial{
+		Name: Crawler_Init,
+		Next: Crawler_104,
+	}
+}
+
+func (i Initial) Entry() {
 	fmt.Println("Entry initial")
 }
 
-func (Initial) Crawler() string {
-	return Crawler_104
+func (i Initial) Crawler() string {
+	return i.Next
 }
 
-func (Initial) Exit() {
+func (i Initial) Exit() {
 	fmt.Println("Exit initial")
 	time.Sleep(2 * time.Second)
 }

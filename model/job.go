@@ -37,7 +37,8 @@ func (Job) TableName() string {
 
 func InsertJob(jobid, keyword, company, title, salary, content, link, website string) bool {
 	insert := Job{JobId: jobid, Keyword: keyword, Company: company, Title: title, Salary: salary, Content: content, Link: link, Website: website, Status: JobOk, CreateAt: time.Now()}
-	db := DB.Set("gorm:insert_option", "ON DUPLICATE KEY UPDATE JobId = VALUES(JobId)").Create(&insert)
+	db := DB.Set("gorm:insert_option", "ON DUPLICATE KEY UPDATE Title = VALUES(Title), Salary = VALUES(Salary), Content = VALUES(Content), Link = VALUES(Link)").
+		Create(&insert)
 	if db.Error != nil {
 		log.Println(db.Error)
 	}
