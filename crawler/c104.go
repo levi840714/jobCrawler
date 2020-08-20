@@ -9,10 +9,6 @@ import (
 	"github.com/gocolly/colly/v2"
 )
 
-const (
-	URL_104 = "https://www.104.com.tw/jobs/search/?keyword=golang&area=6001001000,6001008000&jobsource=2018indexpoc&ro=0&page="
-)
-
 var ch104 = make(chan bool, 1)
 
 type c104 struct {
@@ -47,7 +43,7 @@ func (c c104) Crawler() string {
 }
 
 func crawler104(page int) {
-	url := fmt.Sprintf("%s%d", URL_104, page)
+	url := fmt.Sprintf("https://www.104.com.tw/jobs/search/?keyword=%s&area=6001001000,6001008000&jobsource=2018indexpoc&ro=0&page=%d", Keyword, page)
 	fmt.Println(url)
 	stories := []jobInfo{}
 
@@ -100,7 +96,7 @@ func crawler104(page int) {
 		// fmt.Println("薪資: ", v.Salary)
 		// fmt.Println("内容: ", v.Content)
 		// fmt.Println("連結: ", v.Link)
-		result := model.InsertJob(v.Id, "golang", v.Company, v.Title, v.Salary, v.Content, v.Link, "104")
+		result := model.InsertJob(v.Id, Keyword, v.Company, v.Title, v.Salary, v.Content, v.Link, "104")
 		if result == true {
 			telegram.Send(v.String())
 		}

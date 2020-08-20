@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 
 	"jobCrawler/config"
@@ -12,6 +13,15 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
 )
+
+func init() {
+	keyword := flag.String("keyword", "", "Search keywords")
+	flag.Parse()
+	if *keyword == "" {
+		panic("Please enter search keywords!!")
+	}
+	crawler.Keyword = *keyword
+}
 
 func main() {
 	var err error

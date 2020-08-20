@@ -21,6 +21,8 @@ const (
 	Crawler_CakeResume = "NewCakeresume"
 )
 
+var Keyword string
+
 func (j *jobInfo) String() string {
 	return fmt.Sprintf("公司: %s\n職缺: %s\n薪資: %s\n内容: \n%s\n連結: %s", j.Company, j.Title, j.Salary, j.Content, j.Link)
 }

@@ -4,14 +4,11 @@ import (
 	"fmt"
 	"jobCrawler/model"
 	"jobCrawler/telegram"
+	"strconv"
 	"strings"
 	"time"
 
 	"github.com/gocolly/colly/v2"
-)
-
-const (
-	URL_CR = "https://www.cakeresume.com/jobs?q=golang&refinementList%5Blocation_list%5D%5B0%5D=%E5%8F%B0%E4%B8%AD&refinementList%5Blocation_list%5D%5B1%5D=%E5%8F%B0%E5%8C%97&page="
 )
 
 var chCR = make(chan bool, 1)
@@ -48,7 +45,7 @@ func (c cakeresume) Crawler() string {
 }
 
 func crawlerCakeresume(page int) {
-	url := fmt.Sprintf("%s%d", URL_CR, page)
+	url := "https://www.cakeresume.com/jobs?q=" + Keyword + "&refinementList%5Blocation_list%5D%5B0%5D=%E5%8F%B0%E4%B8%AD&refinementList%5Blocation_list%5D%5B1%5D=%E5%8F%B0%E5%8C%97&page=" + strconv.Itoa(page)
 	fmt.Println(url)
 	stories := []jobInfo{}
 
@@ -110,7 +107,7 @@ func crawlerCakeresume(page int) {
 		// fmt.Println("薪資: ", v.Salary)
 		// fmt.Println("内容: ", v.Content)
 		// fmt.Println("連結: ", v.Link)
-		result := model.InsertJob(v.Id, "golang", v.Company, v.Title, v.Salary, v.Content, v.Link, "CakeResume")
+		result := model.InsertJob(v.Id, Keyword, v.Company, v.Title, v.Salary, v.Content, v.Link, "CakeResume")
 		if result == true {
 			telegram.Send(v.String())
 		}
