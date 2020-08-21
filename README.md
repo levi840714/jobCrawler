@@ -9,8 +9,12 @@ Please go to the **.env.example** file to set the config data
 
 **CHANNEL_ID** is the telegram channel to push the job message
 
-Then execute the command
+Then execute commands
 
-```
+<pre>
+# {keyword} Enter the search keywords you want
+
+docker-compose build --build-arg keyword={<b>keyword</b>} service
+
 docker-compose up -d
-```
+</pre>
