@@ -1,5 +1,5 @@
 # jobCrawler
-Golang job crawler form 104、CakeResume website
+Golang job crawler from 104、CakeResume website
 
 ## Docker directly deploy environment
 
