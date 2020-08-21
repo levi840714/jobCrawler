@@ -48,7 +48,9 @@ func main() {
 
 	wg.Add(1)
 	for _, keyword := range keywords {
-		go crawler.Run(keyword)
+		if keyword != "" {
+			go crawler.Run(keyword)
+		}
 	}
 	wg.Wait()
 }
