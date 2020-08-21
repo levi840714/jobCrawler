@@ -11,17 +11,19 @@ import (
 	"github.com/gocolly/colly/v2"
 )
 
-var chCR = make(chan bool, 1)
-
 type cakeresume struct {
-	Name string
-	Next string
+	Name    string
+	Next    string
+	Keyword string
+	chCR    chan bool
 }
 
-func NewCakeresume() Action {
+func NewCakeresume(keyword string) Action {
 	return cakeresume{
-		Name: Crawler_CakeResume,
-		Next: Crawler_Init,
+		Name:    Crawler_CakeResume,
+		Next:    Crawler_Init,
+		Keyword: keyword,
+		chCR:    make(chan bool, 1),
 	}
 }
 
@@ -33,19 +35,19 @@ func (c cakeresume) Crawler() string {
 	var page int = 1
 	for {
 		select {
-		case <-chCR:
+		case <-c.chCR:
 			fmt.Println("stop cakeresume crawler")
 			return c.Next
 		default:
-			crawlerCakeresume(page)
+			crawlerCakeresume(c.Keyword, page, c.chCR)
 			page++
 			time.Sleep(time.Second)
 		}
 	}
 }
 
-func crawlerCakeresume(page int) {
-	url := "https://www.cakeresume.com/jobs?q=" + Keyword + "&refinementList%5Blocation_list%5D%5B0%5D=%E5%8F%B0%E4%B8%AD&refinementList%5Blocation_list%5D%5B1%5D=%E5%8F%B0%E5%8C%97&page=" + strconv.Itoa(page)
+func crawlerCakeresume(keyword string, page int, chCR chan bool) {
+	url := "https://www.cakeresume.com/jobs?q=" + keyword + "&refinementList%5Blocation_list%5D%5B0%5D=%E5%8F%B0%E4%B8%AD&refinementList%5Blocation_list%5D%5B1%5D=%E5%8F%B0%E5%8C%97&page=" + strconv.Itoa(page)
 	fmt.Println(url)
 	stories := []jobInfo{}
 
@@ -107,7 +109,7 @@ func crawlerCakeresume(page int) {
 		// fmt.Println("薪資: ", v.Salary)
 		// fmt.Println("内容: ", v.Content)
 		// fmt.Println("連結: ", v.Link)
-		result := model.InsertJob(v.Id, Keyword, v.Company, v.Title, v.Salary, v.Content, v.Link, "CakeResume")
+		result := model.InsertJob(v.Id, keyword, v.Company, v.Title, v.Salary, v.Content, v.Link, "CakeResume")
 		if result == true {
 			telegram.Send(v.String())
 		}

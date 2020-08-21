@@ -21,8 +21,6 @@ const (
 	Crawler_CakeResume = "NewCakeresume"
 )
 
-var Keyword string
-
 func (j *jobInfo) String() string {
 	return fmt.Sprintf("公司: %s\n職缺: %s\n薪資: %s\n内容: \n%s\n連結: %s", j.Company, j.Title, j.Salary, j.Content, j.Link)
 }
@@ -50,14 +48,14 @@ func (j *JobCrawler) Run() {
 	}
 }
 
-func Run() {
+func Run(keyword string) {
 	jobCrawler := JobCrawler{
 		Initial: Crawler_Init,
 		Final:   Crawler_Shutdown,
 		Action: map[string]Action{
-			Crawler_Init:       NewInit(),
-			Crawler_104:        New104(),
-			Crawler_CakeResume: NewCakeresume(),
+			Crawler_Init:       NewInit(keyword),
+			Crawler_104:        New104(keyword),
+			Crawler_CakeResume: NewCakeresume(keyword),
 		},
 	}
 
@@ -65,14 +63,16 @@ func Run() {
 }
 
 type Initial struct {
-	Name string
-	Next string
+	Keyword string
+	Name    string
+	Next    string
 }
 
-func NewInit() Action {
+func NewInit(keyword string) Action {
 	return Initial{
-		Name: Crawler_Init,
-		Next: Crawler_104,
+		Keyword: keyword,
+		Name:    Crawler_Init,
+		Next:    Crawler_104,
 	}
 }
 

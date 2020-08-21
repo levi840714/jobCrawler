@@ -3,6 +3,8 @@ package main
 import (
 	"flag"
 	"fmt"
+	"strings"
+	"sync"
 
 	"jobCrawler/config"
 	"jobCrawler/crawler"
@@ -14,17 +16,20 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-func init() {
+func main() {
+	var err error
+	var wg sync.WaitGroup
+	var keywords []string
+
+	// Get search keywords separated by ","
 	keyword := flag.String("keyword", "", "Search keywords")
 	flag.Parse()
 	if *keyword == "" {
 		panic("Please enter search keywords!!")
 	}
-	crawler.Keyword = *keyword
-}
+	keywords = strings.Split(*keyword, ",")
+	fmt.Println(keywords)
 
-func main() {
-	var err error
 	//DB connect
 	connectStr := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
 		config.Config.Mysql.User, config.Config.Mysql.Password, config.Config.Mysql.Ip, config.Config.Mysql.Port, config.Config.Mysql.Db)
@@ -40,5 +45,10 @@ func main() {
 	telegram.Init()
 
 	//start job crawler run!
-	crawler.Run()
+
+	wg.Add(1)
+	for _, keyword := range keywords {
+		go crawler.Run(keyword)
+	}
+	wg.Wait()
 }

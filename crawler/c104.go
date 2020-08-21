@@ -9,17 +9,19 @@ import (
 	"github.com/gocolly/colly/v2"
 )
 
-var ch104 = make(chan bool, 1)
-
 type c104 struct {
-	Name string
-	Next string
+	Name    string
+	Next    string
+	Keyword string
+	ch104   chan bool
 }
 
-func New104() Action {
+func New104(keyword string) Action {
 	return c104{
-		Name: Crawler_104,
-		Next: Crawler_CakeResume,
+		Name:    Crawler_104,
+		Next:    Crawler_CakeResume,
+		Keyword: keyword,
+		ch104:   make(chan bool, 1),
 	}
 }
 
@@ -31,19 +33,19 @@ func (c c104) Crawler() string {
 	var page int = 1
 	for {
 		select {
-		case <-ch104:
+		case <-c.ch104:
 			fmt.Println("stop 104 crawler")
 			return c.Next
 		default:
-			crawler104(page)
+			crawler104(c.Keyword, page, c.ch104)
 			page++
 			time.Sleep(time.Second)
 		}
 	}
 }
 
-func crawler104(page int) {
-	url := fmt.Sprintf("https://www.104.com.tw/jobs/search/?keyword=%s&area=6001001000,6001008000&jobsource=2018indexpoc&ro=0&page=%d", Keyword, page)
+func crawler104(keyword string, page int, ch104 chan bool) {
+	url := fmt.Sprintf("https://www.104.com.tw/jobs/search/?keyword=%s&area=6001001000,6001008000&jobsource=2018indexpoc&ro=0&page=%d", keyword, page)
 	fmt.Println(url)
 	stories := []jobInfo{}
 
@@ -96,7 +98,7 @@ func crawler104(page int) {
 		// fmt.Println("薪資: ", v.Salary)
 		// fmt.Println("内容: ", v.Content)
 		// fmt.Println("連結: ", v.Link)
-		result := model.InsertJob(v.Id, Keyword, v.Company, v.Title, v.Salary, v.Content, v.Link, "104")
+		result := model.InsertJob(v.Id, keyword, v.Company, v.Title, v.Salary, v.Content, v.Link, "104")
 		if result == true {
 			telegram.Send(v.String())
 		}
