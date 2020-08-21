@@ -3,7 +3,7 @@ Golang job crawler from 104、CakeResume website
 
 ## Docker directly deploy environment
 
-Please go to the **.env.example** file to set the config data 
+Please copy the **.env.example** to **.env** file and set the config data 
 
 **BOT_TOKEN** is your telegram bot token
 
