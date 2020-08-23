@@ -13,6 +13,7 @@ Then execute commands
 
 <pre>
 # {keyword} Enter the search keywords you want
+# If you have multiple keywords, separate them with ","  Example: keyword=golang,python
 
 docker-compose build --build-arg keyword={<b>keyword</b>} service
 
