@@ -72,6 +72,9 @@ func crawler104(keyword string, page int, ch104 chan bool) {
 		tmp.Salary = e.ChildText(".b-tag--default")
 		tmp.Content = e.ChildText(".job-list-item__info")
 		tmp.Link = e.ChildAttr("a", "href")
+		e.ForEach(".b-content", func(i int, element *colly.HTMLElement) {
+			tmp.Location = e.ChildTexts("li")[3]
+		})
 		stories = append(stories, tmp)
 	})
 
@@ -98,7 +101,7 @@ func crawler104(keyword string, page int, ch104 chan bool) {
 		// fmt.Println("薪資: ", v.Salary)
 		// fmt.Println("内容: ", v.Content)
 		// fmt.Println("連結: ", v.Link)
-		result := model.InsertJob(v.Id, keyword, v.Company, v.Title, v.Salary, v.Content, v.Link, "104")
+		result := model.InsertJob(v.Id, keyword, v.Company, v.Location, v.Title, v.Salary, v.Content, v.Link, "104")
 		if result == true {
 			telegram.Send(v.String())
 		}

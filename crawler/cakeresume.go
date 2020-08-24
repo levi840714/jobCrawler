@@ -79,6 +79,7 @@ func crawlerCakeresume(keyword string, page int, chCR chan bool) {
 
 		tmp.Id = id
 		tmp.Company = e.ChildText(".page-name")
+		tmp.Location = e.ChildText(".middot")
 		tmp.Title = e.ChildText(".job-link")
 		tmp.Salary = salary
 		tmp.Content = e.ChildText(".job-desc")
@@ -109,7 +110,7 @@ func crawlerCakeresume(keyword string, page int, chCR chan bool) {
 		// fmt.Println("薪資: ", v.Salary)
 		// fmt.Println("内容: ", v.Content)
 		// fmt.Println("連結: ", v.Link)
-		result := model.InsertJob(v.Id, keyword, v.Company, v.Title, v.Salary, v.Content, v.Link, "CakeResume")
+		result := model.InsertJob(v.Id, keyword, v.Company, v.Location, v.Title, v.Salary, v.Content, v.Link, "CakeResume")
 		if result == true {
 			telegram.Send(v.String())
 		}

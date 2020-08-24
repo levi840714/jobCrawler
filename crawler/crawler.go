@@ -6,12 +6,13 @@ import (
 )
 
 type jobInfo struct {
-	Id      string
-	Company string
-	Title   string
-	Salary  string
-	Content string
-	Link    string
+	Id       string
+	Company  string
+	Location string
+	Title    string
+	Salary   string
+	Content  string
+	Link     string
 }
 
 const (
@@ -22,7 +23,7 @@ const (
 )
 
 func (j *jobInfo) String() string {
-	return fmt.Sprintf("公司: %s\n職缺: %s\n薪資: %s\n内容: \n%s\n連結: %s", j.Company, j.Title, j.Salary, j.Content, j.Link)
+	return fmt.Sprintf("公司: %s\n地區: %s\n職缺: %s\n薪資: %s\n内容: \n%s\n連結: %s", j.Company, j.Location, j.Title, j.Salary, j.Content, j.Link)
 }
 
 type Action interface {

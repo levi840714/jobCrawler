@@ -22,6 +22,7 @@ type Job struct {
 	JobId    string    `gorm:"column:JobId"`
 	Keyword  string    `gorm:"column:Keyword"`
 	Company  string    `gorm:"column:Company"`
+	Location string    `gorm:"column:Location"`
 	Title    string    `gorm:"column:Title"`
 	Salary   string    `gorm:"column:Salary"`
 	Content  string    `gorm:"column:Content"`
@@ -35,9 +36,9 @@ func (Job) TableName() string {
 	return "job"
 }
 
-func InsertJob(jobid, keyword, company, title, salary, content, link, website string) bool {
-	insert := Job{JobId: jobid, Keyword: keyword, Company: company, Title: title, Salary: salary, Content: content, Link: link, Website: website, Status: JobOk, CreateAt: time.Now()}
-	db := DB.Set("gorm:insert_option", "ON DUPLICATE KEY UPDATE Title = VALUES(Title), Salary = VALUES(Salary), Content = VALUES(Content), Link = VALUES(Link)").
+func InsertJob(jobid, keyword, company, location, title, salary, content, link, website string) bool {
+	insert := Job{JobId: jobid, Keyword: keyword, Company: company, Location: location, Title: title, Salary: salary, Content: content, Link: link, Website: website, Status: JobOk, CreateAt: time.Now()}
+	db := DB.Set("gorm:insert_option", "ON DUPLICATE KEY UPDATE Location = VALUES(Location), Title = VALUES(Title), Salary = VALUES(Salary), Content = VALUES(Content), Link = VALUES(Link)").
 		Create(&insert)
 	if db.Error != nil {
 		log.Println(db.Error)
