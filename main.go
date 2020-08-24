@@ -31,14 +31,14 @@ func main() {
 	fmt.Println(keywords)
 
 	//DB connect
-	connectStr := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
+	connectStr := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		config.Config.Mysql.User, config.Config.Mysql.Password, config.Config.Mysql.Ip, config.Config.Mysql.Port, config.Config.Mysql.Db)
 	model.DB, err = gorm.Open("mysql", connectStr)
 	if err != nil {
 		panic("DB connection failed!")
 	}
 
-	model.DB.Set("gorm:table_options", "ENGINE=InnoDB DEFAULT CHARSET=utf8").AutoMigrate(schema.AllSchema...)
+	model.DB.Set("gorm:table_options", "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci").AutoMigrate(schema.AllSchema...)
 	defer model.DB.Close()
 
 	// telegram bot setup
