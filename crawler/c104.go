@@ -16,7 +16,7 @@ type c104 struct {
 	ch104   chan bool
 }
 
-func New104(keyword string) Action {
+func New104(keyword string) IAction {
 	return c104{
 		Name:    Crawler_104,
 		Next:    Crawler_CakeResume,

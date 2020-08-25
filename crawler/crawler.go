@@ -5,6 +5,13 @@ import (
 	"time"
 )
 
+const (
+	Crawler_Init       = "initial"
+	Crawler_Shutdown   = "shutdown"
+	Crawler_104        = "New104"
+	Crawler_CakeResume = "NewCakeresume"
+)
+
 type jobInfo struct {
 	Id       string
 	Company  string
@@ -15,18 +22,11 @@ type jobInfo struct {
 	Link     string
 }
 
-const (
-	Crawler_Init       = "initial"
-	Crawler_Shutdown   = "shutdown"
-	Crawler_104        = "New104"
-	Crawler_CakeResume = "NewCakeresume"
-)
-
 func (j *jobInfo) String() string {
 	return fmt.Sprintf("公司: %s\n地區: %s\n職缺: %s\n薪資: %s\n内容: \n%s\n連結: %s", j.Company, j.Location, j.Title, j.Salary, j.Content, j.Link)
 }
 
-type Action interface {
+type IAction interface {
 	Entry()
 	Crawler() string
 	Exit()
@@ -35,7 +35,7 @@ type Action interface {
 type JobCrawler struct {
 	Initial string
 	Final   string
-	Action  map[string]Action
+	Action  map[string]IAction
 }
 
 func (j *JobCrawler) Run() {
@@ -53,7 +53,7 @@ func Run(keyword string) {
 	jobCrawler := JobCrawler{
 		Initial: Crawler_Init,
 		Final:   Crawler_Shutdown,
-		Action: map[string]Action{
+		Action: map[string]IAction{
 			Crawler_Init:       NewInit(keyword),
 			Crawler_104:        New104(keyword),
 			Crawler_CakeResume: NewCakeresume(keyword),
@@ -69,7 +69,7 @@ type Initial struct {
 	Next    string
 }
 
-func NewInit(keyword string) Action {
+func NewInit(keyword string) IAction {
 	return Initial{
 		Keyword: keyword,
 		Name:    Crawler_Init,

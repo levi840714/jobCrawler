@@ -18,7 +18,7 @@ type cakeresume struct {
 	chCR    chan bool
 }
 
-func NewCakeresume(keyword string) Action {
+func NewCakeresume(keyword string) IAction {
 	return cakeresume{
 		Name:    Crawler_CakeResume,
 		Next:    Crawler_Init,
