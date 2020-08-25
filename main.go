@@ -16,11 +16,12 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-func main() {
-	var err error
-	var wg sync.WaitGroup
-	var keywords []string
+var (
+	wg       sync.WaitGroup
+	keywords []string
+)
 
+func main() {
 	// Get search keywords separated by ","
 	keyword := flag.String("keyword", "", "Search keywords")
 	flag.Parse()
@@ -31,6 +32,7 @@ func main() {
 	fmt.Println(keywords)
 
 	//DB connect
+	var err error
 	connectStr := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		config.Config.Mysql.User, config.Config.Mysql.Password, config.Config.Mysql.Ip, config.Config.Mysql.Port, config.Config.Mysql.Db)
 	model.DB, err = gorm.Open("mysql", connectStr)
@@ -45,7 +47,6 @@ func main() {
 	telegram.Init()
 
 	//start job crawler run!
-
 	wg.Add(1)
 	for _, keyword := range keywords {
 		if keyword != "" {
