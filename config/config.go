@@ -22,15 +22,9 @@ type Redis struct {
 	Auth string `json:"Auth"`
 }
 
-type Jwt struct {
-	Secret   []byte `json:"Secret"`
-	LifeTime int    `json:"LifeTime" `
-}
-
 type MyConfig struct {
 	Mysql
 	Redis
-	Jwt
 	Telegram
 }
 
@@ -51,10 +45,6 @@ var Config = MyConfig{
 		Ip:   GetStr("REDIS_ENDPOINT"),
 		Port: GetStr("REDIS_PORT"),
 		Auth: GetStr("REDIS_AUTH"),
-	},
-	Jwt: Jwt{
-		Secret:   GetBytes("SECRET_KEY"),
-		LifeTime: GetInt("TOKEN_LIFETIME"),
 	},
 	Telegram: Telegram{
 		Token:   GetStr("BOT_TOKEN"),
