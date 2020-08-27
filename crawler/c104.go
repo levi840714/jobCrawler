@@ -36,10 +36,9 @@ func (c c104) Crawler() string {
 		case <-c.ch104:
 			fmt.Println("stop 104 crawler")
 			return c.Next
-		default:
+		case <-time.After(time.Second):
 			crawler104(c.Keyword, page, c.ch104)
 			page++
-			time.Sleep(time.Second)
 		}
 	}
 }

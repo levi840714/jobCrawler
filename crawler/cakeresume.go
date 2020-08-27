@@ -38,10 +38,9 @@ func (c cakeresume) Crawler() string {
 		case <-c.chCR:
 			fmt.Println("stop cakeresume crawler")
 			return c.Next
-		default:
+		case <-time.After(time.Second):
 			crawlerCakeresume(c.Keyword, page, c.chCR)
 			page++
-			time.Sleep(time.Second)
 		}
 	}
 }
