@@ -3,8 +3,12 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
+	"os"
+	"os/signal"
 	"strings"
-	"sync"
+	"syscall"
+	"time"
 
 	"jobCrawler/config"
 	"jobCrawler/crawler"
@@ -17,7 +21,6 @@ import (
 )
 
 var (
-	wg       sync.WaitGroup
 	keywords []string
 )
 
@@ -29,7 +32,7 @@ func main() {
 		panic("Please enter search keywords!!")
 	}
 	keywords = strings.Split(*keyword, ",")
-	fmt.Println(keywords)
+	log.Println(keywords)
 
 	//DB connect
 	var err error
@@ -47,11 +50,21 @@ func main() {
 	telegram.Init()
 
 	//start job crawler run!
-	wg.Add(1)
 	for _, keyword := range keywords {
 		if keyword != "" {
 			go crawler.Run(keyword)
 		}
 	}
-	wg.Wait()
+
+	// graceful shutdown
+	shutdown := make(chan os.Signal)
+	signal.Notify(shutdown, syscall.SIGINT, syscall.SIGTERM, syscall.SIGKILL)
+	<-shutdown
+	log.Printf("service is stopping on %s\n", time.Now().String())
+
+	log.Println("start to close mysql")
+	model.CloseDB()
+	log.Println("close mysql completely")
+
+	log.Println("crawler service is shutdown completely!")
 }

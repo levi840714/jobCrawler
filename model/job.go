@@ -14,7 +14,6 @@ const (
 
 var (
 	DB *gorm.DB
-	TX *gorm.DB
 )
 
 type Job struct {
@@ -46,4 +45,13 @@ func InsertJob(jobid, keyword, company, location, title, salary, content, link, 
 
 	result := db.RowsAffected == 1
 	return result
+}
+
+func CloseDB() {
+	for DB.DB().Stats().InUse > 0 {
+		log.Println("DB not disconnected count: ", DB.DB().Stats().InUse)
+		time.Sleep(time.Second * 1)
+	}
+
+	DB.DB().Close()
 }
