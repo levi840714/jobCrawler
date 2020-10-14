@@ -93,13 +93,8 @@ func crawler104(keyword string, page int, ch104 chan bool) {
 
 	c.Wait()
 
+	// insert to DB and notify to telegram
 	for _, v := range stories {
-		// fmt.Println("ID: ", v.Id)
-		// fmt.Println("公司: ", v.Company)
-		// fmt.Println("職缺: ", v.Title)
-		// fmt.Println("薪資: ", v.Salary)
-		// fmt.Println("内容: ", v.Content)
-		// fmt.Println("連結: ", v.Link)
 		result := model.InsertJob(v.Id, keyword, v.Company, v.Location, v.Title, v.Salary, v.Content, v.Link, "104")
 		if result == true {
 			telegram.Send(v.String())

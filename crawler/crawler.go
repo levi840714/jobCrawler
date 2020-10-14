@@ -38,6 +38,7 @@ type JobCrawler struct {
 	Action  map[string]IAction
 }
 
+// start running crawler action loop
 func (j *JobCrawler) Run() {
 	current := j.Initial
 	for {
@@ -49,6 +50,7 @@ func (j *JobCrawler) Run() {
 	}
 }
 
+// setup jobCrawler action running process
 func Run(keyword string) {
 	jobCrawler := JobCrawler{
 		Initial: Crawler_Init,
