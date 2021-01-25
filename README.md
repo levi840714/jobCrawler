@@ -3,11 +3,11 @@ Golang job crawler from 104、CakeResume website
 
 ## Docker directly deploy environment
 
-Please copy the `.env.example` to `env` file and set the config data 
+Please copy the `.env.example` to `.env` file and set the config data 
 
-> **BOT_TOKEN** is your telegram bot token
+> `BOT_TOKEN` is your telegram bot token
 
-> **CHANNEL_ID** is the telegram channel to push the job message
+> `CHANNEL_ID` is the telegram channel to push the job message
 
 Then execute commands
 
